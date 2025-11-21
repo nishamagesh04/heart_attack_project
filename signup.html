@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup - Heart Attack Prediction</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('{{ url_for("static", filename="images/login_bg.png") }}') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* Transparent overlay for light effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 0;
+        }
+
+        /* Glassy container */
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        /* App Title */
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            color: #ff4757;
+            margin-bottom: 30px;
+        }
+
+        /* Input styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.6);
+            font-size: 16px;
+            outline: none;
+            background-color: rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 10px rgba(106,17,203,0.3);
+            background-color: rgba(255,255,255,0.8);
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            padding: 15px 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Login link */
+        p {
+            margin-top: 25px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        p a {
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        p a:hover {
+            color: #2575fc;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 500px) {
+            .container {
+                padding: 40px 30px;
+            }
+            h2 {
+                font-size: 26px;
+            }
+            input[type="submit"] {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Signup</h2>
+        <form action="/signup" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Signup">
+        </form>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+</body>
+</html>

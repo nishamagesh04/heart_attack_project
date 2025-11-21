@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Heart Attack Prediction</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            background: url('{{ url_for("static", filename="images/heart.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* Background overlay for visibility */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.35);
+            z-index: 0;
+        }
+
+        /* Form Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 480px;
+            transition: all 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+        }
+
+        /* Heading */
+        h2 {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 30px;
+            color: #ff4757;
+            margin-bottom: 25px;
+        }
+
+        /* Form group */
+        .form-group {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .form-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 16px;
+        }
+
+        /* Inputs & selects */
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+            background-color: rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        form input[type="number"]:focus,
+        form select:focus {
+            background-color: rgba(255,255,255,0.85);
+            box-shadow: 0 0 8px rgba(106,17,203,0.3);
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            width: 100%;
+            padding: 15px 0;
+            margin-top: 30px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Prediction result */
+        .prediction {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e74c3c;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 12px 15px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        /* Logout link */
+        a.logout {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        a.logout:hover {
+            color: #333;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 500px) {
+            .container {
+                width: 90%;
+                padding: 30px 20px;
+            }
+            h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Heart Attack Prediction</h2>
+
+        <form method="POST">
+            <!-- Numeric inputs -->
+            <div class="form-group">
+                <i class="fa fa-user"></i>
+                <input type="number" name="age" placeholder="Age" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-heartbeat"></i>
+                <input type="number" name="trestbps" placeholder="Resting BP" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-tint"></i>
+                <input type="number" name="chol" placeholder="Cholesterol" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-heart"></i>
+                <input type="number" name="thalch" placeholder="Max Heart Rate" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-chart-line"></i>
+                <input type="number" step="0.1" name="oldpeak" placeholder="Oldpeak" required>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-signal"></i>
+                <input type="number" name="ca" placeholder="Number of major vessels" min="0" max="3" required>
+            </div>
+
+            <!-- Binary inputs -->
+            <div class="form-group">
+                <i class="fa fa-venus-mars"></i>
+                <select name="sex">
+                    <option value="" disabled selected>Sex</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-syringe"></i>
+                <select name="fbs">
+                    <option value="" disabled selected>Fasting Blood Sugar > 120?</option>
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-running"></i>
+                <select name="exang">
+                    <option value="" disabled selected>Exercise Induced Angina?</option>
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
+            </div>
+
+            <!-- Categorical inputs -->
+            <div class="form-group">
+                <i class="fa fa-stethoscope"></i>
+                <select name="cp">
+                    <option value="" disabled selected>Chest Pain Type</option>
+                    <option value="typical angina">Typical Angina</option>
+                    <option value="atypical angina">Atypical Angina</option>
+                    <option value="non-anginal">Non-Anginal</option>
+                    <option value="asymptomatic">Asymptomatic</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-heart-pulse"></i>
+                <select name="restecg">
+                    <option value="" disabled selected>Resting ECG</option>
+                    <option value="normal">Normal</option>
+                    <option value="lv hypertrophy">LV Hypertrophy</option>
+                    <option value="st-t abnormality">ST-T Abnormality</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-wave-square"></i>
+                <select name="slope">
+                    <option value="" disabled selected>Slope of ST segment</option>
+                    <option value="upsloping">Upsloping</option>
+                    <option value="flat">Flat</option>
+                    <option value="downsloping">Downsloping</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <i class="fa fa-heart-circle-check"></i>
+                <select name="thal">
+                    <option value="" disabled selected>Thalassemia</option>
+                    <option value="normal">Normal</option>
+                    <option value="fixed defect">Fixed Defect</option>
+                    <option value="reversable defect">Reversable Defect</option>
+                </select>
+            </div>
+
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if prediction %}
+        <div class="prediction">Prediction: {{ prediction }}</div>
+        {% endif %}
+
+        <a class="logout" href="/logout">Logout</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cardiac Health Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+        }
+
+        .hero video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .hero .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        .hero h1 {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 36px;
+        }
+
+        .description {
+            max-width: 900px;
+            margin: 20px auto 50px;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .stat-box {
+            flex: 1 1 220px;
+            min-width: 220px;
+            padding: 30px 20px;
+            border-radius: 20px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box i {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box h2 {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        .stat-box p {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Card Gradients */
+        .hypertension { background: linear-gradient(135deg, #ff7e5f, #feb47b); }
+        .cholesterol { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+        .diabetic { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .smokers { background: linear-gradient(135deg, #f953c6, #b91d73); }
+        .obesity { background: linear-gradient(135deg, #ff512f, #dd2476); }
+        .inactive { background: linear-gradient(135deg, #43cea2, #185a9d); }
+        .diet { background: linear-gradient(135deg, #56ab2f, #a8e063); }
+
+        .content-section {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover { background: #2980b9; }
+
+        @media screen and (max-width: 1100px) {
+            .stats-container { flex-direction: column; align-items: center; }
+            .stat-box { width: 90%; max-width: 300px; }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 650px;
+            text-align: left;
+            position: relative;
+        }
+
+        .modal-content h2 { margin-top: 0; }
+        .modal-content p, .modal-content ul { font-size: 16px; line-height: 1.5; margin-bottom: 15px; }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+        .close:hover { color: #000; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <video autoplay muted loop>
+        <source src="{{ url_for('static', filename='images/heart_animation.gif.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="overlay"></div>
+    <h1>Cardiac Health Overview</h1>
+</div>
+
+<div class="description">
+    Heart attacks occur when blood flow to the heart is blocked. Click on a card to explore detailed information about each risk factor, including symptoms, lifestyle recommendations, and preventive measures.
+</div>
+
+<div class="stats-container">
+    <!-- High Blood Pressure -->
+    <div class="stat-box hypertension" onclick="showModal('High Blood Pressure','High blood pressure strains the heart and blood vessels, increasing risk of heart attack.','Helpful Practices: Monitor blood pressure regularly, low-salt diet, physical activity, medication adherence.','Risk Factors: Excessive salt intake, stress, obesity, smoking.')">
+        <i class="fa fa-tachometer-alt"></i>
+        <h2>{{ high_bp }}</h2>
+        <p>High Blood Pressure</p>
+    </div>
+
+    <!-- High Cholesterol -->
+    <div class="stat-box cholesterol" onclick="showModal('High Cholesterol','High cholesterol can lead to plaque buildup in arteries, restricting blood flow to the heart.','Helpful Practices: Balanced diet with low saturated fats, regular exercise, medications if prescribed.','Risk Factors: High-fat diet, smoking, obesity, lack of physical activity.')">
+        <i class="fa fa-heart"></i>
+        <h2>{{ high_chol }}</h2>
+        <p>High Cholesterol</p>
+    </div>
+
+    <!-- Diabetic Patients -->
+    <div class="stat-box diabetic" onclick="showModal('Diabetic Patients','Diabetes increases risk of cardiovascular complications, including heart attacks.','Helpful Practices: Blood sugar management, balanced diet, regular exercise, follow-up with doctor.','Risk Factors: Poor glucose control, sedentary lifestyle, unhealthy diet, obesity.')">
+        <i class="fa fa-syringe"></i>
+        <h2>{{ diabetic }}</h2>
+        <p>Diabetic Patients</p>
+    </div>
+
+    <!-- Smokers -->
+    <div class="stat-box smokers" onclick="showModal('Smokers','Smoking damages blood vessels and increases the risk of heart disease.','Helpful Practices: Quit smoking, engage in physical activity, follow healthy lifestyle.','Risk Factors: Smoking, alcohol abuse, unhealthy diet, stress.')">
+        <i class="fa fa-smoking"></i>
+        <h2>{{ smokers }}</h2>
+        <p>Smokers</p>
+    </div>
+
+    <!-- Obesity -->
+    <div class="stat-box obesity" onclick="showModal('Obesity','Excess body weight increases the workload on the heart and risk of cardiovascular disease.','Helpful Practices: Balanced diet, regular physical activity, weight management.','Risk Factors: Sedentary lifestyle, high-calorie diet, genetics.')">
+        <i class="fa fa-weight"></i>
+        <h2>{{ obesity }}</h2>
+        <p>Obesity</p>
+    </div>
+
+    <!-- Physical Inactivity -->
+    <div class="stat-box inactive" onclick="showModal('Physical Inactivity','Lack of exercise weakens the heart and increases risk of heart disease.','Helpful Practices: At least 150 minutes of moderate exercise per week.','Risk Factors: Sedentary jobs, lack of motivation, excessive screen time.')">
+        <i class="fa fa-running"></i>
+        <h2>{{ inactive }}</h2>
+        <p>Physical Inactivity</p>
+    </div>
+
+    <!-- Unhealthy Diet -->
+    <div class="stat-box diet" onclick="showModal('Unhealthy Diet','Diets high in saturated fats, sugar, and salt increase cardiac risk.','Helpful Practices: Balanced diet, limit processed foods, increase fruits and vegetables.','Risk Factors: Fast food, sugary drinks, high salt intake.')">
+        <i class="fa fa-apple-alt"></i>
+        <h2>{{ diet }}</h2>
+        <p>Unhealthy Diet</p>
+    </div>
+</div>
+
+<div class="content-section">
+    <a href="{{ url_for('home') }}" class="btn">Go to Heart Attack Prediction</a>
+</div>
+
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <ul>
+            <li id="modalHelp"></li>
+            <li id="modalRisk"></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalHelp = document.getElementById('modalHelp');
+    const modalRisk = document.getElementById('modalRisk');
+
+    function showModal(title, description, help, riskFactor) {
+        modalTitle.innerText = title;
+        modalDescription.innerText = description;
+        modalHelp.innerText = help;
+        modalRisk.innerText = riskFactor;
+        modal.style.display = 'block';
+    }
+
+    function closeModal() { modal.style.display = 'none'; }
+    window.onclick = function(event) { if(event.target == modal) closeModal(); }
+</script>
+
+</body>
+</html>
